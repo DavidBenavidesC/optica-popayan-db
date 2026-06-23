@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>{{ accion }} producto</h3>
+
+<form method="post" class="mt-4" onsubmit="return validarFormulario()">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="nombre" class="form-label">Nombre del producto</label>
+      <input type="text" name="nombre" id="nombre" class="form-control" required
+             value="{{ producto.nombre if producto else '' }}">
+    </div>
+
+    <div class="col-md-6">
+      <label for="tipo" class="form-label">Tipo de producto</label>
+      <select name="tipo" id="tipo" class="form-select" required>
+        <option value="">Seleccione...</option>
+        <option value="ACCESORIO" {% if producto and producto.tipo == 'ACCESORIO' %}selected{% endif %}>ACCESORIO</option>
+        <option value="MARCO" {% if producto and producto.tipo == 'MARCO' %}selected{% endif %}>MARCO</option>
+        <option value="LENTE" {% if producto and producto.tipo == 'LENTE' %}selected{% endif %}>LENTE</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <input type="text" name="descripcion" id="descripcion" class="form-control"
+             value="{{ producto.descripcion if producto else '' }}" placeholder="Escriba una breve descripción...">
+    </div>
+
+    <div class="col-md-3">
+      <label for="precio_venta" class="form-label">Precio de venta</label>
+      <input type="number" step="0.01" min="0.01" name="precio_venta" id="precio_venta" class="form-control" required
+             value="{{ producto.precio_venta if producto else '' }}" placeholder="Ej: 120000">
+    </div>
+
+    <div class="col-md-3">
+      <label for="stock" class="form-label">Stock</label>
+      <input type="number" min="0" step="1" name="stock" id="stock" class="form-control" required
+             value="{{ producto.stock if producto else '' }}" placeholder="Ej: 10">
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/productos" class="btn btn-secondary">Volver</a>
+  </div>
+</form>
+
+<script>
+function validarFormulario() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const tipo = document.getElementById('tipo').value;
+  const precio = parseFloat(document.getElementById('precio_venta').value);
+  const descripcion = document.getElementById('descripcion');
+  const stock = parseInt(document.getElementById('stock').value);
+
+  if (!nombre) {
+    alert('Debe ingresar el nombre del producto.');
+    return false;
+  }
+
+  if (!tipo) {
+    alert('Debe seleccionar un tipo de producto.');
+    return false;
+  }
+
+  if (isNaN(precio) || precio < 0.01) {
+    alert('El precio debe ser un número válido mayor a 0.');
+    return false;
+  }
+
+  if (isNaN(stock) || stock < 0) {
+    alert('El stock debe ser un número entero igual o mayor a 0.');
+    return false;
+  }
+
+  // Si la descripción está vacía, autocompletar con el nombre
+  if (!descripcion.value.trim()) {
+    descripcion.value = nombre;
+  }
+
+  return true;
+}
+</script>
+{% endblock %}

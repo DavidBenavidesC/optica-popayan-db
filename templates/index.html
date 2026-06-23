@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-5 fw-bold text-dark">Panel principal</h2>
+
+  <div class="row justify-content-center g-4">
+
+    <!-- Clientes -->
+    <div class="col-md-3 col-sm-6">
+      <a href="{{ url_for('clientes') }}" class="text-decoration-none">
+        <div class="card text-center border-primary h-100 hover-shadow">
+          <div class="card-body">
+            <h5 class="card-title text-primary">Clientes</h5>
+            <p class="text-muted mb-0">Gestión de clientes registrados</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Productos -->
+    <div class="col-md-3 col-sm-6">
+      <a href="{{ url_for('productos') }}" class="text-decoration-none">
+        <div class="card text-center border-success h-100 hover-shadow">
+          <div class="card-body">
+            <h5 class="card-title text-success">Productos</h5>
+            <p class="text-muted mb-0">Inventario y tipos de producto</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Consultas -->
+    <div class="col-md-3 col-sm-6">
+      <a href="{{ url_for('consultas') }}" class="text-decoration-none">
+        <div class="card text-center border-warning h-100 hover-shadow">
+          <div class="card-body">
+            <h5 class="card-title text-warning">Consultas</h5>
+            <p class="text-muted mb-0">Historial de consultas visuales</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Ventas -->
+    <div class="col-md-3 col-sm-6">
+      <a href="{{ url_for('ventas') }}" class="text-decoration-none">
+        <div class="card text-center border-danger h-100 hover-shadow">
+          <div class="card-body">
+            <h5 class="card-title text-danger">Ventas</h5>
+            <p class="text-muted mb-0">Registro y control de ventas</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Reportes -->
+    <div class="col-md-3 col-sm-6">
+      <a href="{{ url_for('reportes') }}" class="text-decoration-none">
+        <div class="card text-center border-dark h-100 hover-shadow">
+          <div class="card-body">
+            <h5 class="card-title text-dark">Reportes</h5>
+            <p class="text-muted mb-0">Indicadores y estadísticas</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Proveedores -->
+    <div class="col-md-3 col-sm-6">
+      <a href="{{ url_for('proveedores') }}" class="text-decoration-none">
+        <div class="card text-center border-secondary h-100 hover-shadow">
+          <div class="card-body">
+            <h5 class="card-title text-secondary">Proveedores</h5>
+            <p class="text-muted mb-0">Gestión de proveedores</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Pedidos -->
+    <div class="col-md-3 col-sm-6">
+      <a href="{{ url_for('pedidos') }}" class="text-decoration-none">
+        <div class="card text-center border-info h-100 hover-shadow">
+          <div class="card-body">
+            <h5 class="card-title text-info">Pedidos</h5>
+            <p class="text-muted mb-0">Solicitudes a proveedores</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.hover-shadow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+  transition: all 0.2s ease-in-out;
+}
+</style>
+{% endblock %}

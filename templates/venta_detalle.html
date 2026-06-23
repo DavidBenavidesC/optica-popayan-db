@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card shadow p-4">
+  <h3 class="mb-4">Detalle de Venta #{{ venta.venta_id }}</h3>
+
+  <div class="mb-3">
+    <p><strong>Cliente:</strong> {{ venta.cliente or 'Sin cliente' }}</p>
+    <p><strong>Fecha:</strong> {{ venta.fecha.strftime('%Y-%m-%d %H:%M') if venta.fecha else 'No registrada' }}</p>
+    <p><strong>Registrado por:</strong> {{ venta.usuario }}</p>
+    <p><strong>Total:</strong> ${{ '{:,.0f}'.format(venta.total) }}</p>
+  </div>
+
+  <hr>
+
+  <h5>Productos vendidos</h5>
+  {% if detalles %}
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>Producto</th>
+          <th class="text-center">Cantidad</th>
+          <th class="text-end">Precio Unitario</th>
+          <th class="text-end">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in detalles %}
+        <tr>
+          <td>{{ d.nombre }}</td>
+          <td class="text-center">{{ d.cantidad }}</td>
+          <td class="text-end">${{ '{:,.0f}'.format(d.precio_unitario) }}</td>
+          <td class="text-end">${{ '{:,.0f}'.format(d.subtotal) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="text-muted">No hay detalles registrados para esta venta.</p>
+  {% endif %}
+
+  <div class="mt-4 text-end">
+    <a href="{{ url_for('ventas') }}" class="btn btn-secondary">Volver</a>
+  </div>
+</div>
+{% endblock %}

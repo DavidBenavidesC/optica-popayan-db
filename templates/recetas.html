@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Recetas</h3>
+    <a href="/recetas/nueva" class="btn btn-success">Nueva receta</a>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-primary">
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Observaciones</th>
+            <th>Registrado por</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in recetas %}
+        <tr>
+            <td>{{ r.receta_id }}</td>
+            <td>{{ r.cliente }}</td>
+            <td>{{ r.fecha.strftime('%Y-%m-%d') if r.fecha else '' }}</td>
+            <td>{{ r.observaciones or '' }}</td>
+            <td>{{ r.usuario or '—' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

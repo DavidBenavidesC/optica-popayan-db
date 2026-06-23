@@ -1,0 +1,87 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>Reportes del Sistema</h3>
+
+<div class="row text-center mt-4">
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Clientes</h5>
+                <h3>{{ total_clientes }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Productos</h5>
+                <h3>{{ total_productos }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm bg-warning text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Ventas</h5>
+                <h3>{{ total_ventas }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card shadow-sm bg-danger text-white">
+            <div class="card-body">
+                <h5 class="card-title">Monto total vendido</h5>
+                <h3>${{ '%.2f'|format(monto_total) }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-4">
+
+<div class="row">
+    <div class="col-md-6">
+        <h5>Top 5 productos más vendidos</h5>
+        <table class="table table-sm table-bordered">
+            <thead class="table-secondary">
+                <tr>
+                    <th>Producto</th>
+                    <th>Unidades vendidas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in top_productos %}
+                <tr>
+                    <td>{{ p.nombre }}</td>
+                    <td>{{ p.unidades }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <h5>Últimas 5 consultas registradas</h5>
+        <table class="table table-sm table-bordered">
+            <thead class="table-secondary">
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Registrado por</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in ultimas_consultas %}
+                <tr>
+                    <td>{{ c.consulta_id }}</td>
+                    <td>{{ c.cliente }}</td>
+                    <td>{{ c.fecha.strftime('%Y-%m-%d') if c.fecha else '' }}</td>
+                    <td>{{ c.usuario or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

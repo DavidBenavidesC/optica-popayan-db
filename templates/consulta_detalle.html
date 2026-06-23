@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>Detalle de consulta #{{ consulta.consulta_id }}</h3>
+
+<div class="card mt-3">
+  <div class="card-body">
+    <h5 class="card-title">Información general</h5>
+    <p><strong>Cliente:</strong> {{ consulta.cliente }}</p>
+    <p><strong>Fecha:</strong> {{ consulta.fecha.strftime('%Y-%m-%d') if consulta.fecha else '' }}</p>
+    <p><strong>Observaciones:</strong> {{ consulta.observaciones or 'Sin observaciones' }}</p>
+    <p><strong>Precio:</strong> ${{ "%.0f"|format(consulta.precio) }}</p>
+    <p><strong>Registrado por:</strong> {{ consulta.usuario }}</p>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-body">
+    <h5 class="card-title">Fórmula asociada</h5>
+
+    {% if receta %}
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Ojo</th>
+        <th>Esfera</th>
+        <th>Cilindro</th>
+        <th>Eje</th>
+        <th>Add</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Derecho (OD)</td>
+        <td>{{ receta.esfera_od or '' }}</td>
+        <td>{{ receta.cilindro_od or '' }}</td>
+        <td>{{ receta.eje_od or '' }}</td>
+        <td>{{ receta.add_od or '' }}</td>
+      </tr>
+      <tr>
+        <td>Izquierdo (OI)</td>
+        <td>{{ receta.esfera_oi or '' }}</td>
+        <td>{{ receta.cilindro_oi or '' }}</td>
+        <td>{{ receta.eje_oi or '' }}</td>
+        <td>{{ receta.add_oi or '' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>Observaciones de la fórmula:</strong> {{ receta.observaciones or 'Ninguna' }}</p>
+
+  <a href="{{ url_for('editar_receta', receta_id=receta.receta_id) }}" class="btn btn-warning">
+    Editar fórmula
+  </a>
+
+{% else %}
+  <div class="alert alert-warning">
+    Esta consulta no tiene fórmula registrada.
+  </div>
+  <a href="{{ url_for('nueva_receta') }}" class="btn btn-success">Agregar fórmula</a>
+{% endif %}
+  </div>
+</div>
+
+<div class="mt-4">
+  <a href="{{ url_for('consultas') }}" class="btn btn-secondary">Volver a consultas</a>
+</div>
+{% endblock %}

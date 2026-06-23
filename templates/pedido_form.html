@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card shadow p-4">
+  <h3 class="mb-4">{{ accion }} Pedido</h3>
+
+  <form method="POST">
+    <div class="row g-3">
+
+      <!-- Cliente -->
+      <div class="col-md-6">
+        <label for="cliente_id" class="form-label">Cliente</label>
+        {% if pedido %}
+          <input type="text" class="form-control" value="{{ pedido.cliente_nombre }}" readonly>
+          <input type="hidden" name="cliente_id" value="{{ pedido.cliente_id }}">
+        {% else %}
+          <select name="cliente_id" id="cliente_id" class="form-select" required>
+            <option value="">Seleccione cliente...</option>
+            {% for c in clientes %}
+              <option value="{{ c.cliente_id }}">{{ c.nombre }}</option>
+            {% endfor %}
+          </select>
+        {% endif %}
+      </div>
+
+      <!-- Receta asociada -->
+<div class="col-md-6">
+  <label for="receta_id" class="form-label">Fórmula asociada</label>
+  <select name="receta_id" id="receta_id" class="form-select">
+    <option value="">Seleccione un cliente primero</option>
+  </select>
+</div>
+
+      <!-- Proveedor -->
+      <div class="col-md-6">
+        <label for="proveedor_id" class="form-label">Proveedor</label>
+        <select name="proveedor_id" id="proveedor_id" class="form-select" required>
+          {% for prov in proveedores %}
+            <option value="{{ prov.proveedor_id }}"
+              {% if pedido and pedido.proveedor_id == prov.proveedor_id %}selected{% endif %}>
+              {{ prov.nombre }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Producto -->
+      <div class="col-md-6">
+        <label for="producto_id" class="form-label">Producto</label>
+        <select name="producto_id" id="producto_id" class="form-select" required>
+          {% for prod in productos %}
+            <option value="{{ prod.producto_id }}"
+              {% if pedido and pedido.producto_id == prod.producto_id %}selected{% endif %}>
+              {{ prod.nombre }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Cantidad -->
+      <div class="col-md-4">
+        <label for="cantidad" class="form-label">Cantidad</label>
+        <input type="number" name="cantidad" min="1" class="form-control"
+               value="{{ pedido.cantidad if pedido else 1 }}">
+      </div>
+
+      <!-- Estado -->
+      <div class="col-md-8">
+        <label for="estado" class="form-label">Estado</label>
+        <select name="estado" id="estado" class="form-select" required>
+          <option value="SIN_SOLICITAR_A_LAB"
+            {% if pedido and pedido.estado == 'SIN_SOLICITAR_A_LAB' %}selected{% endif %}>
+            Sin solicitar al laboratorio
+          </option>
+          <option value="SOLICITADO_A_LAB"
+            {% if pedido and pedido.estado == 'SOLICITADO_A_LAB' %}selected{% endif %}>
+            Solicitado al laboratorio
+          </option>
+          <option value="RECIBIDO_EN_OPTICA"
+            {% if pedido and pedido.estado == 'RECIBIDO_EN_OPTICA' %}selected{% endif %}>
+            Recibido en óptica
+          </option>
+          <option value="ENTREGADO_A_CLIENTE"
+            {% if pedido and pedido.estado == 'ENTREGADO_A_CLIENTE' %}selected{% endif %}>
+            Entregado al cliente
+          </option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="mt-4 text-end">
+      <a href="{{ url_for('pedidos') }}" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const clienteSelect = document.getElementById('cliente_id');
+  const recetaSelect = document.getElementById('receta_id');
+
+  if (clienteSelect) {
+    clienteSelect.addEventListener('change', async function () {
+      const clienteId = this.value;
+      recetaSelect.innerHTML = '<option value="">Cargando recetas...</option>';
+
+      if (!clienteId) {
+        recetaSelect.innerHTML = '<option value="">Seleccione un cliente primero</option>';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/recetas_por_cliente/${clienteId}`);
+        const data = await response.json();
+
+        recetaSelect.innerHTML = '';
+
+        if (data.recetas.length > 0) {
+          data.recetas.forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.receta_id;
+            opt.textContent = `Receta #${r.receta_id} (${r.fecha})`;
+            recetaSelect.appendChild(opt);
+          });
+        } else {
+          recetaSelect.innerHTML = '<option value="">Este cliente no tiene recetas registradas</option>';
+        }
+      } catch (error) {
+        recetaSelect.innerHTML = '<option value="">Error al cargar recetas</option>';
+        console.error(error);
+      }
+    });
+  }
+});
+</script>
+</div>
+{% endblock %}

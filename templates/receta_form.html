@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>{{ 'Editar fórmula' if editar else 'Nueva fórmula' }}</h3>
+
+<form method="post" class="mt-4">
+  <div class="card">
+    <div class="card-body">
+      {% if receta %}
+        <p><strong>Cliente:</strong> {{ receta.cliente }}</p>
+      {% endif %}
+
+      <table class="table table-bordered align-middle text-center">
+        <thead class="table-light">
+          <tr>
+            <th>Ojo</th>
+            <th>Esfera</th>
+            <th>Cilindro</th>
+            <th>Eje</th>
+            <th>Add</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Derecho (OD)</strong></td>
+            <td><input type="text" name="esfera_od" class="form-control"
+                       value="{{ receta.esfera_od if receta else '' }}"></td>
+            <td><input type="text" name="cilindro_od" class="form-control"
+                       value="{{ receta.cilindro_od if receta else '' }}"></td>
+            <td><input type="text" name="eje_od" class="form-control"
+                       value="{{ receta.eje_od if receta else '' }}"></td>
+            <td><input type="text" name="add_od" class="form-control"
+                       value="{{ receta.add_od if receta else '' }}"></td>
+          </tr>
+          <tr>
+            <td><strong>Izquierdo (OI)</strong></td>
+            <td><input type="text" name="esfera_oi" class="form-control"
+                       value="{{ receta.esfera_oi if receta else '' }}"></td>
+            <td><input type="text" name="cilindro_oi" class="form-control"
+                       value="{{ receta.cilindro_oi if receta else '' }}"></td>
+            <td><input type="text" name="eje_oi" class="form-control"
+                       value="{{ receta.eje_oi if receta else '' }}"></td>
+            <td><input type="text" name="add_oi" class="form-control"
+                       value="{{ receta.add_oi if receta else '' }}"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mb-3">
+        <label for="observaciones" class="form-label">Observaciones</label>
+        <textarea name="observaciones" id="observaciones" class="form-control" rows="3">{{ receta.observaciones if receta else '' }}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <button type="submit" class="btn btn-primary">{{ 'Actualizar' if editar else 'Guardar' }}</button>
+    <a href="{{ url_for('consultas') }}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>Consultas</h3>
+
+<div class="mb-3">
+  <a href="{{ url_for('nueva_consulta') }}" class="btn btn-success">Nueva consulta</a>
+</div>
+
+<table class="table table-striped align-middle">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Cliente</th>
+      <th>Fecha</th>
+      <th>Observaciones</th>
+      <th>Precio</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for con in consultas %}
+    <tr>
+      <td>{{ con.consulta_id }}</td>
+      <td>{{ con.cliente }}</td>
+      <td>{{ con.fecha.strftime('%Y-%m-%d') if con.fecha else '' }}</td>
+      <td>{{ con.observaciones or '' }}</td>
+      <td>${{ "%.0f"|format(con.precio) }}</td>
+      <td>
+        <a href="{{ url_for('detalle_consulta', consulta_id=con.consulta_id) }}" class="btn btn-primary btn-sm">
+          Ver detalles y editar
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

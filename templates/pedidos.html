@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card shadow p-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Pedidos</h3>
+    <a href="{{ url_for('nuevo_pedido') }}" class="btn btn-primary">+ Nuevo Pedido</a>
+  </div>
+
+  {% if pedidos %}
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Fórmula asociada</th>
+          <th>Proveedor</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Estado</th>
+          <th>Registrado por</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in pedidos %}
+        <tr>
+          <td>{{ p.pedido_id }}</td>
+          <td>{{ p.cliente_nombre if p.cliente_nombre else '—' }}</td>
+          <td>
+            {% if p.receta_id %}
+              <a href="{{ url_for('detalle_consulta', consulta_id=p.receta_id) }}" class="text-decoration-none">
+                Receta #{{ p.receta_id }}
+              </a>
+            {% else %}
+              <em>Sin receta</em>
+            {% endif %}
+          </td>
+          <td>{{ p.proveedor_nombre if p.proveedor_nombre else '—' }}</td>
+          <td>{{ p.producto_nombre if p.producto_nombre else '—' }}</td>
+          <td>{{ p.cantidad }}</td>
+          <td>
+            {% if p.estado == 'SIN_SOLICITAR_A_LAB' %}
+              <span class="badge bg-secondary">Sin solicitar</span>
+            {% elif p.estado == 'SOLICITADO_A_LAB' %}
+              <span class="badge bg-warning text-dark">Solicitado al lab</span>
+            {% elif p.estado == 'RECIBIDO_EN_OPTICA' %}
+              <span class="badge bg-info text-dark">Recibido en óptica</span>
+            {% elif p.estado == 'ENTREGADO_A_CLIENTE' %}
+              <span class="badge bg-success">Entregado al cliente</span>
+            {% else %}
+              <span class="badge bg-light text-dark">{{ p.estado }}</span>
+            {% endif %}
+          </td>
+          <td>{{ p.usuario_nombre if p.usuario_nombre else '—' }}</td>
+          <td>
+            <a href="{{ url_for('editar_pedido', pedido_id=p.pedido_id) }}" class="btn btn-sm btn-warning">Editar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="alert alert-info mt-3">No hay pedidos registrados.</div>
+  {% endif %}
+</div>
+{% endblock %}
